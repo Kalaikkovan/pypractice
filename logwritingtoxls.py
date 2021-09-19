@@ -52,7 +52,7 @@ class EbbsLogAnalysis:
         #header = float(sheet.cell_value(0,6))
         #print(header)
 
-
+        # Column name to change as per the output sheet that need to be analysed
         for cell in sheet['B']:
                 
                 if float(cell.value) < 200:
