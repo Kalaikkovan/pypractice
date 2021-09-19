@@ -1,17 +1,18 @@
 import xlrd
 import re,csv,openpyxl
 
+read_location = 'C:\\Users\\1254312\\source\\eBBS.log'
+write_location = 'C:\\Users\\1254312\\source\\Log_output.txt'
+op_location = 'C:\\Users\\1254312\\source\\Logoutput.xlsx'    
+output_sumary = 'C:\\Users\\1254312\\source\\output_summary.txt'
+pattern = "## OUT #"
+delim = '#'
 class EbbsLogAnalysis:
-    read_location = 'C:\\Users\\1254312\\source\\eBBS.log'
-    write_location = 'C:\\Users\\1254312\\source\\Log_output.txt'
-    op_location = 'C:\\Users\\1254312\\source\\Logoutput.xlsx'    
-    output_sumary = 'C:\\Users\\1254312\\source\\output_summary.txt'
-    pattern = "## OUT #"
-    delim = '#'
+    
     
     def log_fetch():
 
-        pattern = "## OUT #"
+        #pattern = "## OUT #"
         file = open(read_location, "r")
              
         output_file = open(write_location,'w')
@@ -22,7 +23,7 @@ class EbbsLogAnalysis:
         output_file.close()
 
     def txtToXls():
-        delim = '#'
+        #delim = '#'
         wb = openpyxl.Workbook()
         ws = wb.worksheets[0]
         
@@ -34,11 +35,12 @@ class EbbsLogAnalysis:
 
 
     def logAnalysis():
-        wb = xlrd.open_workbook(location)
-        sheet = wb.sheet_by_index(0)
-        row_count = sheet.nrows
+        wb = openpyxl.load_workbook(op_location)
+        sheet = wb.active
+        row_count = sheet.max_row
+        
 
-
+        
         zerototwohundred = 0
         twohundredtofour = 0 
         fourhundredtosix = 0
@@ -47,25 +49,23 @@ class EbbsLogAnalysis:
         twosecondandabove = 0
         twoseconds = 0
 
-        header = float(sheet.cell_value(0,6))
+        #header = float(sheet.cell_value(0,6))
         #print(header)
 
 
-        for i in range(sheet.nrows):
-            #rint(sheet.cell_value(i,3))
-            if sheet.cell_value(i,6) != header:
+        for cell in sheet['B']:
                 
-                if float(sheet.cell_value(i,6)) < 200:
+                if float(cell.value) < 200:
                     zerototwohundred += 1
-                elif float(sheet.cell_value(i,6))>=200 and float(sheet.cell_value(i,6))<400:
+                elif float(cell.value)>=200 and float(cell.value)<400:
                     twohundredtofour += 1
-                elif float(sheet.cell_value(i,6))>=400 and float(sheet.cell_value(i,6))<600:
+                elif float(cell.value)>=400 and float(cell.value)<600:
                     fourhundredtosix += 1
-                elif float(sheet.cell_value(i,6))>=600 and float(sheet.cell_value(i,6))<800:
+                elif float(cell.value)>=600 and float(cell.value)<800:
                     sixhundredtoeight += 1
-                elif float(sheet.cell_value(i,6))>=800 and float(sheet.cell_value(i,6))<1000:
+                elif float(cell.value)>=800 and float(cell.value)<1000:
                     eighthundredtothousand += 1
-                elif float(sheet.cell_value(i,6))>=1000 and float(sheet.cell_value(i,6))<2000:
+                elif float(cell.value)>=1000 and float(cell.value)<2000:
                     twoseconds += 1
                 else:
                     twosecondandabove += 1
